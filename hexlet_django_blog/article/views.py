@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.views import View
 from hexlet_django_blog.article.models import Article
+from .forms import CommentArticleForm, ArticleCommentForm
 
 
 class IndexView(View):
@@ -28,3 +29,25 @@ class ArticleCommentsView(View):
         return render(request, 'articles/show.html', context={
             'article': article,
         })
+
+    def post(self, request, *args, **kwargs):
+        form = ArticleCommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.content = check_for_spam(form.data['content'])
+            comment.save()
+
+
+class CommentArticleView(View):
+
+    def get(self, request, *args, **kwargs):
+        form = CommentArticleForm()
+        return render(request, 'comment.html', {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        form = CommentArticleForm(request.POST)
+        if form.is_valid():
+            comment = Comment(
+                name=form.cleaned_data['content'],
+                )
+            comment.save()
