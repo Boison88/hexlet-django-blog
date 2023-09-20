@@ -1,0 +1,10 @@
+<label for="id_content">Комментарий:</label>
+<textarea name="content" cols="40" rows="10" required id="id_content"></textarea>
+
+<form action="{% url 'comment_create' %}" method="post">
+    {% csrf_token %}
+    <table border="1">
+       {{ form }}
+    </table>
+    <input type="submit" value="Сохранить">
+</form>
